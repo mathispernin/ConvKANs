@@ -6,6 +6,6 @@ Comparison of three Kolmogorov-Arnold Network (KAN) activation functions on Fash
 
 | Type | Formula | Key Feature |
 |------|---------|-------------|
-| **B-Spline** | φ(x) = w_b·SiLU(x) + w_s·Σc_i·B_i(x) | Piecewise polynomials |
-| **RBF** | φ(x) = w_b·SiLU(x) + w_r·Σc_j·exp(-(x-μ_j)²/2σ_j²) | Gaussian kernels |
-| **Wavelet** | φ(x) = w_b·SiLU(x) + w_w·Σc_j·ψ_j((x-μ_j)/s_j) | Mexican Hat/Morlet |
+| **B-Spline** | $\phi(x) = w_{b} \cdot \text{SiLU}(x) + w_{s} \cdot \sum_{i=1}^{G+k} c_i B_i(x)$ | Piecewise polynomials |
+| **RBF** | $\phi(x) = w_{b} \cdot \text{SiLU}(x) + w_{r} \cdot \sum_{j=1}^{Q} c_j \exp\left(-\frac{(x - \mu_j)^2}{2\sigma_j^2}\right)$ | Gaussian kernels |
+| **Wavelet** | $\phi(x) = w_{b} \cdot \text{SiLU}(x) + w_{w} \cdot \sum_{j=1}^{Q} c_j \psi_{j}(x)$ | Mexican Hat/Morlet |
