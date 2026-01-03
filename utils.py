@@ -132,7 +132,7 @@ def get_layer_classes(layer_type):
     else:
         raise ValueError(f"Unknown layer type: {layer_type}")
 
-def build_model(architecture, activation, config, in_channels=1, input_size=(28, 28), num_classes=10):
+def build_model(architecture, activation, config, in_channels=1, input_size=(28, 28), num_classes=10, use_batchnorm=False):
     """
     Build a model based on architecture and activation type.
     
@@ -155,11 +155,13 @@ def build_model(architecture, activation, config, in_channels=1, input_size=(28,
         return KKAN_Small(conv_layer, config, linear_layer, config,
                           num_classes=num_classes,
                           in_channels=in_channels,
-                          input_size=input_size)
+                          input_size=input_size,
+                          use_batchnorm=use_batchnorm)
     elif architecture == 'KANC_MLP_Medium':
         return KANC_MLP_Medium(conv_layer, config,
                                num_classes=num_classes,
                                in_channels=in_channels,
-                               input_size=input_size)
+                               input_size=input_size,
+                               use_batchnorm=use_batchnorm)
     else:
         raise ValueError(f"Unknown architecture: {architecture}")

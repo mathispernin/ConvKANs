@@ -14,7 +14,8 @@ class KKAN_Small(nn.Module):
         linear_params,       # dict des params pour la couche linéaire
         num_classes=10,
         in_channels=1,
-        input_size=(28, 28)
+        input_size=(28, 28),
+        use_batchnorm=False
     ):
         super().__init__()
         # conv/pool settings (same as before)
@@ -30,6 +31,7 @@ class KKAN_Small(nn.Module):
             padding=(p_h, p_w),
             **conv_params
         )
+        self.bn1 = nn.BatchNorm2d(5) if use_batchnorm else None
         self.pool1 = nn.MaxPool2d(2, 2)
         self.conv2 = conv_layer_class(
             in_channels=5,
@@ -39,6 +41,7 @@ class KKAN_Small(nn.Module):
             padding=(p_h, p_w),
             **conv_params
         )
+        self.bn2 = nn.BatchNorm2d(5) if use_batchnorm else None
         self.pool2 = nn.MaxPool2d(2, 2)
         self.flatten = nn.Flatten()
 
@@ -66,8 +69,12 @@ class KKAN_Small(nn.Module):
 
     def forward(self, x):
         x = self.conv1(x)
+        if self.bn1 is not None:
+            x = self.bn1(x)
         x = self.pool1(x)
         x = self.conv2(x)
+        if self.bn2 is not None:
+            x = self.bn2(x)
         x = self.pool2(x)
         x = self.flatten(x)
         x = self.fc(x)
@@ -98,7 +105,8 @@ class KANC_MLP_Medium(nn.Module):
         conv_params,         # dict des params pour la couche conv
         num_classes=10,
         in_channels=1,
-        input_size=(28, 28)
+        input_size=(28, 28),
+        use_batchnorm=False
     ):
         super().__init__()
         k_h, k_w = 3, 3
@@ -113,6 +121,7 @@ class KANC_MLP_Medium(nn.Module):
             padding=(p_h, p_w),
             **conv_params
         )
+        self.bn1 = nn.BatchNorm2d(5) if use_batchnorm else None
         self.pool1 = nn.MaxPool2d(2, 2)
         self.conv2 = conv_layer_class(
             in_channels=5,
@@ -122,6 +131,7 @@ class KANC_MLP_Medium(nn.Module):
             padding=(p_h, p_w),
             **conv_params
         )
+        self.bn2 = nn.BatchNorm2d(10) if use_batchnorm else None
         self.pool2 = nn.MaxPool2d(2, 2)
         self.flatten = nn.Flatten()
 
@@ -145,8 +155,12 @@ class KANC_MLP_Medium(nn.Module):
 
     def forward(self, x):
         x = self.conv1(x)
+        if self.bn1 is not None:
+            x = self.bn1(x)
         x = self.pool1(x)
         x = self.conv2(x)
+        if self.bn2 is not None:
+            x = self.bn2(x)
         x = self.pool2(x)
         x = self.flatten(x)
         x = self.fc(x)
