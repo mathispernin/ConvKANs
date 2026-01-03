@@ -27,6 +27,11 @@ def multiple_convs_kan_conv2d(
     conv_groups = unfold(matrix).view(batch_size, n_channels, kernel_size * kernel_size, h_out * w_out).transpose(2, 3) # Shape: (batch_size, n_channels, num_patches, kernel_size*kernel_size)
     kernels_per_out = len(kernels) // out_channels
 
+    # Ensure kernel submodules (KANLinear) are on the same device as the input
+    for kernel in kernels:
+        if hasattr(kernel, 'conv') and isinstance(kernel.conv, torch.nn.Module):
+            kernel.conv.to(device)
+
     for c_out in range(out_channels):
         out_accum = torch.zeros((batch_size, h_out, w_out), device=device)
         for k_idx in range(kernels_per_out):
