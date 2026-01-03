@@ -79,6 +79,11 @@ class KKAN_Small(nn.Module):
         h = h // 2  # pool2
         w = w // 2
 
+        # account for extra convs (each reduces spatial dims by kernel-1 when padding=0)
+        for _ in range(len(self.extra_convs)):
+            h = conv_out(h, k_h, p_h, s_h)
+            w = conv_out(w, k_w, p_w, s_w)
+
         in_features = 5 * h * w
         self.fc = linear_layer_class(
             in_features=in_features,
@@ -200,6 +205,11 @@ class KANC_MLP_Medium(nn.Module):
         w = conv_out(w, k_w, p_w, s_w)
         h = h // 2
         w = w // 2
+
+        # account for extra convs (each reduces spatial dims by kernel-1 when padding=0)
+        for _ in range(len(self.extra_convs)):
+            h = conv_out(h, k_h, p_h, s_h)
+            w = conv_out(w, k_w, p_w, s_w)
 
         in_features = 10 * h * w
         self.fc = nn.Linear(in_features, num_classes)  # MLP standard
