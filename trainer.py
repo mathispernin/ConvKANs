@@ -11,7 +11,7 @@ class Trainer:
     def __init__(self, model, device='cpu', lr=1e-3, weight_decay=1e-4, reg_lambda=0.0, epochs=30):
         self.model = model.to(device)
         self.device = device
-        self.criterion = nn.NLLLoss()
+        self.criterion = nn.CrossEntropyLoss()
         self.optimizer = optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
         self.reg_lambda = reg_lambda
         self.epochs = epochs
